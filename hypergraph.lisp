@@ -1,10 +1,21 @@
+(defpackage #:hypergraph
+  (:use #:cl)
+  (:export #:make-graph #:add-vertex #:graph-vertices #:vertex-value #:vertex-edges
+           #:add-edge #:edge-value #:edge-vertices #:edge-length
+           #:vertex-nary-edges))
 (in-package #:hypergraph)
 
-(defun make-graph ()
-  (make-hash-table))
+(defun make-graph (&optional size)
+  (if size
+      (make-hash-table :size size)
+      (make-hash-table)))
 
 (defun add-vertex (graph key &optional value)
   (setf (gethash key graph) (cons value nil)))
+
+(defun graph-vertices (graph)
+  nil)
+  
 
 (defun vertex-value (graph vertex)
   (car (gethash vertex graph)))
@@ -32,9 +43,6 @@
 (defun vertex-nary-edges (graph vertex n)
   "Return a list of edges connected to exactly `n` vertices (including `vertex`)"
   (remove-if-not (lambda (e) (= (edge-length e) n)) (vertex-edges graph vertex)))
-
-
-
   
 (defun test ()
   (let* ((g (make-graph)))

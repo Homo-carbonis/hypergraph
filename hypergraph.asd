@@ -1,10 +1,12 @@
-(defsystem dyn
+(defsystem hypergraph 
   :author "Hugh Coleman"
   :version "0.1"
-  :description "Dynamical"
-  :depends-on ("misc" "let-over-lambda" "trivia" "srfi-1")
-  :components ((:file "packages")
-               (:file "dyn" :depends-on ("packages"))
-               (:file "n-tree" :depends-on ("packages"))
-               (:file "hypergraph" :depends-on ("packages"))
-               (:file "solver" :depends-on ("packages" "n-tree" "hypergraph"))))
+  :description "Hypergraph data structure"
+  :components ((:file "hypergraph"))
+  :in-order-to ((test-op (test-op "hypergraph/test"))))
+
+
+(defsystem hypergraph/test
+  :depends-on ("hypergraph" "fiveam")
+  :perform (test-op (op c) (symbol-call :rove :run c))
+  :components ((:file "test")))
