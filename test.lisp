@@ -1,15 +1,22 @@
 (defpackage #:hypergraph/test
-  (:use #:cl #:hypergraph #:fiveam))
+  (:use #:cl #:misc #:hypergraph #:fiveam))
 (in-package #:hypergraph/test)
 
-(defsuite* hypergraph)
+(def-suite* hypergraph-test)
+
+(test vertex-test
+  (let ((g (make-graph 2)))
+    (add-vertex g 'v1 1)
+    (add-vertex g 'v2 2)
+    (is (eq (vertex-value g 'v1) 1))
+    (signals vertex-not-found-error (vertex-value g 'v3))
+    (is (unordered-equal '(v1 v2) (graph-vertices g)))))
+
 (test edge-test
-  (let ((g (hypergraph:make-graph 2)))
-      (add-vertex g 'a 1)
-      (add-vertex g 'b 2)
-      (ok (eq (vertex-value g 'a) 1))
-      (ok (eq (vertex-value g 'b) 2))
-    (testing "add edge"
-      (let ((edge (add-edge g 1 '(a b))))
-        (ok (eq edge (car (vertex-edges 'a))))
-        (ok (eq edge (car (vertex-edges 'b))))))))
+  (let ((g (make-graph 2)))
+      (add-vertex g 'v1 1)
+      (add-vertex g 'v2 2)
+    (let ((edge (add-edge g '(v1 v2) 1)))
+        (is (eq (edge-value edge) 1)) 
+        (is (eq edge (car (vertex-edges g 'v1))))
+        (is (eq edge (car (vertex-edges g 'v2)))))))
