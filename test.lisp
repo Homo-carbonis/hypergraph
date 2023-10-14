@@ -1,51 +1,32 @@
 (defpackage #:hypergraph/test
-  (:use #:cl #:misc #:alexandria #:hypergraph #:fiveam))
+  (:use #:cl #:misc-utils #:hypergraph #:rove))
+
 (in-package #:hypergraph/test)
 
-(def-suite* hypergraph-test)
-
-(test vertex-test
-  (let ((g (make-graph 2)))
-    (add-vertex g 'v1 1)
-    (add-vertex g 'v2 2)
-    (is (eq (vertex-value g 'v1) 1))
-    (signals vertex-not-found-error (vertex-value g 'v3))
-    (is (unordered-equal '(v1 v2) (graph-vertices g)))))
-
-(test edge-test
-  (let ((g (make-graph 2)))
-      (add-vertex g 'v1 1)
-      (add-vertex g 'v2 2)
-    (let ((edge (add-edge g '(v1 v2) 1)))
-        (is (eq (edge-value edge) 1)) 
-        (is (eq edge (car (vertex-edges g 'v1))))
-        (is (eq edge (car (vertex-edges g 'v2)))))))
-
-(test equal-test
-  (let ((g1 (make-graph)))
-    (add-vertex g1 'v1 1)
-    (add-vertex g1 'v2 2)
-    (let ((g2 (copy-hash-table g1))
-          (g3 (copy-hash-table g1))
-          (g4 (copy-hash-table g1))
-          (g5 (copy-hash-table g1))
-          (g6 (copy-hash-table g1)))
-      (is (graph-equal g1 g2))
-      (add-edge g1 '(v1 v2) 1)
-      (add-edge g2 '(v1 v2) 1)
-      (add-edge g3 '(v2 v1) 1)
-      (add-edge g4 '(v1) 5)
-      (is (graph-equal g1 g2))
-      (is (graph-equal g1 g3))
-      (print (vertex-edges g4 'v2))
-      (is-false (graph-equal g1 g4))
-      (add-vertex g2 'v3 3)
-      (is-false (graph-equal g1 g2)))))
-
-      
-
-
-
-
-
-
+(deftest ve-test
+  (let ((g (make-ve-graph :vertex-count 2 :edge-count 0)))
+    (add-vertex g :key 'v1 :value 1)
+    (add-vertex g :key 'v2 :value 2)
+    (add-edge g :key 'e1 :vertices '(v1 v2) :value 10)
+    (ok (vertexp 'v1 g))
+    (ng (vertexp 'e1 g))
+    (ok (equal (vertex-value 'v1 g) 1))
+    (signals (vertex-value 'asdhfjkl g) 'key-absent-error)
+    (ok (equal (vertex-edges 'v1 g) '(e1)))
+    (ok (equal (vertex-edges 'v2 g) '(e1)))
+    (ok (equal (vertex-edge-count 'v1 g) 1))
+    (ok (equal (vertex-nary-edges 2 'v1 g) '(e1)))
+    (ok (equal (vertex-nary-edges 1 'v1 g) '()))
+    (ok (unordered-equal (graph-vertices g) '(v1 v2)))
+    (ok (equal (vertex-count g) 2))
+    (ok (edgep 'e1 g))
+    (ng (edgep 'v1 g))
+    (ok (equal (edge-value 'e1 g) 10))
+    (signals (edge-value 'djafal g) 'key-absent-error)
+    (ok (unordered-equal (edge-vertices 'e1 g) '(v1 v2)))
+    (ok (equal (edge-vertex-count 'e1 g) 2))
+    (ok (unordered-equal (edge-nary-vertices 1 'e1 g) '(v1 v2)))
+    (ok (equal (edge-nary-vertices 2 'e1 g) '()))
+    (ok (equal (graph-edges g) '(e1)))
+    (ok (equal (edge-count g) 1))
+    (ok (unordered-equal '(v1 v2) (graph-vertices g)))))
