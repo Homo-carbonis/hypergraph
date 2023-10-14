@@ -1,5 +1,6 @@
 (defpackage :hypergraph/vertex-edge
   (:nicknames :ve-hypergraph)
+  (:import-from :alexandria :rcurry)
   (:use :cl :misc-utils :hash-utils)
   (:export
     :make-ve-graph
@@ -7,16 +8,20 @@
     :vertexp
     :vertex-value
     :vertex-edges
+    :vertex-edge-values
     :vertex-edge-count
     :vertex-nary-edges
+    :vertex-nary-edge-values
     :graph-vertices
     :vertex-count
     :add-edge
     :edgep
     :edge-value
     :edge-vertices
+    :edge-vertex-values
     :edge-vertex-count
     :edge-nary-vertices
+    :edge-nary-vertex-values
     :graph-edges
     :edge-count
     :key-absent-error))
@@ -46,12 +51,18 @@
 (defun vertex-edges (vertex graph)
   (cdr (get-vertex-data vertex graph)))
 
+(defun vertex-edge-values (vertex graph)
+  (mapcar (rcurry #'edge-value graph) (vertex-edges vertex graph)))
+
 (defun vertex-edge-count (vertex graph)
   (length (vertex-edges vertex graph)))
 
 (defun vertex-nary-edges (n vertex graph)
   (remove-if-not (lambda (edge) (= n (edge-vertex-count edge graph)))
                  (vertex-edges vertex graph)))
+
+(defun vertex-nary-edge-values (n vertex graph)
+  (mapcar (rcurry #'edge-value graph) (vertex-nary-edges n vertex graph)))
 
 (defun graph-vertices (graph)
   (hash-table-keys (car graph)))
@@ -79,12 +90,18 @@
 (defun edge-vertices (edge graph)
   (cdr (get-edge-data edge graph)))
 
+(defun edge-vertex-values (edge graph)
+  (mapcar (rcurry #'vertex-value graph) (edge-vertices edge graph)))
+
 (defun edge-vertex-count (edge graph)
   (length (edge-vertices edge graph)))
 
 (defun edge-nary-vertices (n edge graph)
   (remove-if-not (lambda (vertex) (= n (vertex-edge-count vertex graph)))
                  (edge-vertices edge graph)))
+
+(defun edge-nary-vertex-values (n edge graph)
+  (mapcar (rcurry #'vertex-value graph) (edge-nary-vertices n edge graph)))
 
 (defun graph-edges (graph)
   (hash-table-keys (cdr graph)))
