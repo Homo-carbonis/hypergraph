@@ -24,6 +24,8 @@
     :edge-nary-vertex-values
     :graph-edges
     :edge-count
+    :link-vertex-edge
+    :linkedp
     :key-absent-error))
 
 (in-package :hypergraph/vertex-edge)
@@ -32,7 +34,6 @@
   (cons 
    (make-hash-table :size vertex-count)
    (make-hash-table :size edge-count)))
-
 
 ;;; Vertex functions
 (defun add-vertex (graph &key key value)
@@ -48,8 +49,14 @@
 (defun vertex-value (vertex graph)
   (car (get-vertex-data vertex graph)))
 
+(defun (setf vertex-value) (value vertex graph)
+  (setf (car (get-vertex-data vertex graph)) value))
+
 (defun vertex-edges (vertex graph)
   (cdr (get-vertex-data vertex graph)))
+
+(defun (setf vertex-edges) (edges vertex graph)
+  (setf (cdr (get-vertex-data vertex graph)) edges))
 
 (defun vertex-edge-values (vertex graph)
   (mapcar (rcurry #'edge-value graph) (vertex-edges vertex graph)))
@@ -74,8 +81,8 @@
 ;;; Edge functions
 (defun add-edge (graph &key key value vertices)
   (add-hash (cdr graph) :key key :value (cons value vertices))
-  (dolist (n vertices)
-    (pushnew key (cdr (get-hash n (car graph)))))
+  (dolist (v vertices)
+    (pushnew key (vertex-edges v graph)))
   key)
 
 (defun edgep (edge graph)
@@ -87,8 +94,14 @@
 (defun edge-value (edge graph)
   (car (get-edge-data edge graph)))
 
+(defun (setf edge-value) (value edge graph)
+  (setf (car (get-edge-data edge graph)) value))
+
 (defun edge-vertices (edge graph)
   (cdr (get-edge-data edge graph)))
+
+(defun (setf edge-vertices) (vertices edge graph)
+  (setf (cdr (get-edge-data edge graph)) vertices))
 
 (defun edge-vertex-values (edge graph)
   (mapcar (rcurry #'vertex-value graph) (edge-vertices edge graph)))
@@ -108,3 +121,11 @@
 
 (defun edge-count (graph)
   (hash-table-count (cdr graph)))
+
+
+(defun link-vertex-edge (vertex edge graph)
+  (pushnew vertex (edge-vertices edge graph))
+  (pushnew edge (vertex-edges vertex graph)))
+
+(defun linkedp (vertex edge graph)
+  (member vertex (edge-vertices edge graph)))
