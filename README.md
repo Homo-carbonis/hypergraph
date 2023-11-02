@@ -87,8 +87,11 @@ Return a list of all edges.
 Return the number of edges.
 
 #### Both
-`(link-vertex-edge vertex edge graph)`
+`(link vertex edge graph)`
 Connect a vertex with an edge.
+
+`(unlink vertex edge graph)`
+Disconnect a vertex and an edge.
 
 `(linkedp vertex edge graph)`
 True if vertex and edge are connected.

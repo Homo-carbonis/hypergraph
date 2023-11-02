@@ -1,6 +1,5 @@
 (defpackage :hypergraph
-  (:import-from :alexandria :rcurry)
-  ;(:use :cl :misc-utils :hash-utils)
+  (:import-from :alexandria :rcurry :deletef)
   (:use :cl :hypergraph/utils/hash)
   (:export
     :make-graph
@@ -24,7 +23,8 @@
     :edge-nary-vertex-values
     :graph-edges
     :edge-count
-    :link-vertex-edge
+    :link
+    :unlink
     :linkedp
     :key-absent-error))
 
@@ -150,10 +150,16 @@
   (hash-table-count (cdr graph)))
 
 
-(defun link-vertex-edge (vertex edge graph)
-  "Connect a vertex with an edge."
+(defun link (vertex edge graph)
+  "Connect a vertex and an edge."
   (pushnew vertex (edge-vertices edge graph))
   (pushnew edge (vertex-edges vertex graph)))
+
+(defun unlink (vertex edge graph)
+  "Disconnect a vertex and an edge."
+  (deletef (edge-vertices edge graph) vertex)
+  (deletef (vertex-edges vertex graph) edge))
+
 
 (defun linkedp (vertex edge graph)
   "True if vertex and edge are connected"
