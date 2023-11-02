@@ -11,7 +11,7 @@ This is a simple implemnetation of a hypergraph data structure which uses hash t
 (edge-nary-vertices 1 'e1 *graph*)
 > (v1 v2)
 ```
-### Interface
+
 `(make-graph &key vertex-count edge-count)`
 Return a new empty graph.
 
@@ -85,7 +85,7 @@ Return a list of all edges.
 `(edge-count graph)`
 Return the number of edges.
 
-
+#### Both
 `(link-vertex-edge vertex edge graph)`
 Connect a vertex with an edge.
 
