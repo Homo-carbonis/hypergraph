@@ -1,5 +1,5 @@
 # Hypergraph
-This is a simple implemnetation of a hypergraph data structure which uses hash tables to store edges and vertices.
+This is a simple implementation of a hypergraph data structure which uses hash tables to store edges and vertices.
 
 ## Usage
 ```lisp
@@ -12,7 +12,7 @@ This is a simple implemnetation of a hypergraph data structure which uses hash t
 > (v1 v2)
 ```
 
-#### graph
+#### Graph
 `(make-graph &key vertex-count edge-count)`
 Return a new empty graph.
 
