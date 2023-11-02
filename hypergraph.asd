@@ -8,7 +8,6 @@
   :perform (test-op (op c) (symbol-call :rove :run-suite :hypergraph/test)))
 
 
-(register-system-packages "utils/misc" '(:misc-utils))
-(register-system-packages "utils/hash" '(:hash-utils))
-(register-system-packages "let-over-lambda" '(:lol))
+(register-system-packages "hypergraph/utils/misc" '(:misc-utils))
+(register-system-packages "hypergraph/utils/hash" '(:hash-utils))
 
