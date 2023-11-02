@@ -1,10 +1,10 @@
-(defpackage #:hypergraph/base
+(defpackage #:hypergraph/unary
   (:use #:cl #:misc-utils #:hash-utils)
-  (:export #:make-graph #:add-node #:graph-nodes #:node-count #:node-value #:node-nary-neighbours))
+  (:export #:make-unary-graph #:add-node #:graph-nodes #:node-count #:node-value #:node-nary-neighbours))
 
 (in-package #:hypergraph/base)
 
-(defun make-graph (&optional count)
+(defun make-unary-graph (&optional count)
   (make-hash-table :size count))
 
 (defun add-node (graph &key key value neighbours)

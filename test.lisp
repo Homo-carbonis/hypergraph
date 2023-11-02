@@ -4,7 +4,7 @@
 (in-package #:hypergraph/test)
 
 (deftest ve-test
-  (let ((g (make-ve-graph :vertex-count 2 :edge-count 0)))
+  (let ((g (make-graph :vertex-count 2 :edge-count 0)))
     (add-vertex g :key 'v1 :value 1)
     (add-vertex g :key 'v2 :value 2)
     (add-edge g :key 'e1 :vertices '(v1 v2) :value 10)

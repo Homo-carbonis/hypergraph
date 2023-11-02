@@ -1,9 +1,8 @@
-(defpackage :hypergraph/vertex-edge
-  (:nicknames :ve-hypergraph)
+(defpackage :hypergraph/binary
   (:import-from :alexandria :rcurry)
   (:use :cl :misc-utils :hash-utils)
   (:export
-    :make-ve-graph
+    :make-graph
     :add-vertex
     :vertexp
     :vertex-value
@@ -28,12 +27,16 @@
     :linkedp
     :key-absent-error))
 
-(in-package :hypergraph/vertex-edge)
+(in-package :hypergraph/binary)
 
-(defun make-ve-graph (&key edge-count vertex-count)
+(defun make-graph (&key vertex-count edge-count)
   (cons 
-   (make-hash-table :size vertex-count)
-   (make-hash-table :size edge-count)))
+    (if vertex-count
+        (make-hash-table :size vertex-count)
+        (make-hash-table)) 
+    (if edge-count
+        (make-hash-table :size edge-count)
+        (make-hash-table))))
 
 ;;; Vertex functions
 (defun add-vertex (graph &key key value)
