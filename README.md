@@ -12,6 +12,7 @@ This is a simple implemnetation of a hypergraph data structure which uses hash t
 > (v1 v2)
 ```
 
+#### graph
 `(make-graph &key vertex-count edge-count)`
 Return a new empty graph.
 
