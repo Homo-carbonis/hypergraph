@@ -1,6 +1,6 @@
 (defsystem hypergraph 
   :author "Hugh Coleman"
-  :version "0.1"
+  :version "1.0"
   :description "Hypergraph data structure"
   :class :package-inferred-system
   :depends-on ("hypergraph/hypergraph")
